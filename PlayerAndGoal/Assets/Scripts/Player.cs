@@ -9,7 +9,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && _gun.ReadyToShoot())
+        {
+            _gun.Shoot(_goalPool.GetNextGoalTransform());
+        }
+        if (Input.touchCount > 0 && _gun.ReadyToShoot())
         {
             _gun.Shoot(_goalPool.GetNextGoalTransform());
         }

@@ -8,31 +8,33 @@ public class Gun : MonoBehaviour
 
     float _rocketRotationSpeed;
     float _rocketMovementSpeed;
-    float _reloadedTime;
+    float _reloadTime;
 
-    bool _orderToShoot = true;
+    bool _readyToShoot = true;
 
-    #region Set
+    #region Set / Get
     public void SetRocketRotationSpeed(float speed) { _rocketRotationSpeed = speed; }
     public void SetRocketMovementSpeed(float speed) { _rocketMovementSpeed = speed; }
-    public void SetReloadedTime(float seconds) { _reloadedTime = seconds; }
+    public void SetReloadedTime(float seconds) { _reloadTime = seconds; }
+
+    public bool ReadyToShoot() { return _readyToShoot; }
     #endregion
 
     public void Init(float rocketRotationSpeed, float rocketMovementSpeed, float reloadedTime)
     {
-        _reloadedTime = reloadedTime;
+        _reloadTime = reloadedTime;
         _rocketMovementSpeed = rocketMovementSpeed;
         _rocketRotationSpeed = rocketRotationSpeed;
     }
 
     private void Start()
     {
-        _orderToShoot = true;
+        _readyToShoot = true;
     }
 
     public void Shoot(Transform terget)
     {
-        if (_orderToShoot)
+        if (_readyToShoot)
         {
             Rocket rocket = Instantiate(_rocket, _spawnPoint);
             rocket.gameObject.name = "Rocket";
@@ -44,8 +46,8 @@ public class Gun : MonoBehaviour
 
     IEnumerator Reloaded()
     {
-        _orderToShoot = false;
-        yield return new WaitForSeconds(_reloadedTime);
-        _orderToShoot = true;
+        _readyToShoot = false;
+        yield return new WaitForSeconds(_reloadTime);
+        _readyToShoot = true;
     }
 }

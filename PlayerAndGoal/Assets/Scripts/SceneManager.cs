@@ -6,15 +6,18 @@ public class SceneManager : MonoBehaviour
 {
     [Header("Goals")]
     [SerializeField] private int _goalsCount;
-    [SerializeField] private int _goalsRotationSpeed;
+    [SerializeField, Range(10, 100)] private int _goalsRotationSpeed;
     [SerializeField] private GoalPool _goalPool;
     [Header("Gun")]
-    [SerializeField] private float _rocketRotationSpeed;
-    [SerializeField] private float _rocketMovementSpeed;
-    [SerializeField] float _rocketReloadedTime;
+    [SerializeField, Range(50, 200)] private float _rocketRotationSpeed;
+    [SerializeField, Range(1, 10)] private float _rocketMovementSpeed;
+    [SerializeField, Range(1, 10)] float _rocketReloadedTime;
     [SerializeField] Gun _gun;
-    [Header("Apply settings")]
-    [SerializeField] bool _apply;
+
+    private int   _goalsRotationSpeedLast;
+    private float _rocketRotationSpeedLast;
+    private float _rocketMovementSpeedLast;
+    private float _rocketReloadedTimeLast;
 
     // Start is called before the first frame update
     void Start()
@@ -24,16 +27,43 @@ public class SceneManager : MonoBehaviour
 
     private void Update()
     {
-        if (_apply)
+        if (NeedUpdate())
         {
             _goalPool.SetSpeed(_goalsRotationSpeed);
             _gun.SetReloadedTime(_rocketReloadedTime);
             _gun.SetRocketMovementSpeed(_rocketMovementSpeed);
             _gun.SetRocketRotationSpeed(_rocketRotationSpeed);
-
-            _apply = false;
         }
     }
+
+
+    private bool NeedUpdate() 
+    {
+        bool answer = false;
+
+        if (_goalsRotationSpeedLast != _goalsRotationSpeed)
+        {
+            answer = true;
+            _goalsRotationSpeedLast = _goalsRotationSpeed;
+        }
+        if (_rocketRotationSpeedLast != _rocketRotationSpeed)
+        {
+            answer = true;
+            _rocketRotationSpeedLast = _rocketRotationSpeed;
+        }
+        if (_rocketMovementSpeedLast != _rocketMovementSpeed)
+        {
+            answer = true;
+            _rocketMovementSpeedLast = _rocketMovementSpeed;
+        }
+        if (_rocketReloadedTimeLast != _rocketReloadedTime)
+        {
+            answer = true;
+            _rocketReloadedTimeLast = _rocketReloadedTime;
+        }
+        return answer;
+    }
+
 
     IEnumerator Init() 
     {
